@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>c1888af3-e197-44ec-9806-f656ea4aabb7</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="assets\test.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="assets\test.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
+    <PackageReference Include="Sang.IoT.SSD1306" Version="1.2.3" />
+  </ItemGroup>
+
+</Project>
