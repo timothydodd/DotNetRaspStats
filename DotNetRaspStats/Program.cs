@@ -1,28 +1,74 @@
-﻿using Sang.IoT.SSD1306;
+﻿using System.Diagnostics;
+using System.Net;
+using System.Net.Sockets;
+using Sang.IoT.SSD1306;
 using SkiaSharp;
 
-using (var oled = new SSD1306_128_64(1))
+internal class Program
 {
-
-    oled.Begin();
-    oled.Clear();
-
-    using (var bitmap = new SKBitmap(128, 64, true))
+    private static bool _quitRequested = false;
+    private static void Main(string[] args)
     {
-        SKCanvas canvas = new(bitmap);
-        SKPaint paint = new()
+        AppDomain.CurrentDomain.ProcessExit += delegate
         {
-            Color = new SKColor(255, 255, 255),
-            StrokeWidth = 1, //画笔宽度
-            Typeface = SKTypeface.FromFile("assets/RobotoRegular-3m4L.ttf"),
-            TextSize = 13,  //字体大小
-            Style = SKPaintStyle.Fill,
+            _quitRequested = true;
         };
-        canvas.DrawText("test: this ", 0, 13, paint);
-        paint.TextSize = 30;
-        canvas.DrawText("Another Time Test ", 0, 50, paint);
-        oled.Image(bitmap.Encode(SKEncodedImageFormat.Png, 100).ToArray());
-    }
+        Console.CancelKeyPress += delegate (object? sender, ConsoleCancelEventArgs e)
+        {
+            Console.WriteLine("Cancel Key Pressed");
+            e.Cancel = true;
+            _quitRequested = true;
+        };
+        using (var oled = new SSD1306_128_64(1))
+        {
+            SKPaint paint = new()
+            {
+                Color = new SKColor(255, 255, 255),
+                StrokeWidth = 1,
+                Typeface = SKTypeface.FromFile("assets/RobotoRegular-3m4L.ttf"),
+                TextSize = 13,
+                Style = SKPaintStyle.Fill,
+            };
+            ScreenStack stack = new ScreenStack();
 
-    oled.Display();
+            var ip = Metrics.GetLocalIPAddress();
+            while (!_quitRequested)
+            {
+                var metrics = Metrics.GetUnixMetrics();
+                var cpuUsage = Metrics.GetCpuMetrics();
+                var totalMemory = Metrics.SizeSuffix((long)metrics.Total, 1);
+                var usedMemory = Metrics.SizeSuffix((long)metrics.Used, 1);
+                stack.Add($"IP:{ip}");
+                stack.Add($"CPU: {cpuUsage.CPU}%");
+                stack.Add($"Mem: {usedMemory} / {totalMemory}");
+                stack.Add($"Up: {cpuUsage.UpTime}");
+
+                oled.Begin();
+                oled.Clear();
+
+                using SKBitmap bitmap = new SKBitmap(128, 64, true);
+
+                using SKCanvas canvas = new(bitmap);
+
+                stack.Draw(canvas, paint);
+
+                oled.Image(bitmap.Encode(SKEncodedImageFormat.Png, 100).ToArray());
+
+
+                oled.Display();
+                stack.Reset();
+                Thread.Sleep(5000);
+            }
+            Console.WriteLine("Exiting");
+            oled.Begin();
+            oled.Clear();
+            oled.Display();
+        }
+
+
+    }
 }
+
+
+
+
