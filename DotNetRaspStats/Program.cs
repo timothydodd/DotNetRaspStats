@@ -6,19 +6,24 @@ using SkiaSharp;
 
 internal class Program
 {
-    private static bool _quitRequested = false;
+
     private static void Main(string[] args)
     {
+        bool quitRequested = false;
+        var source = new CancellationTokenSource();
         AppDomain.CurrentDomain.ProcessExit += delegate
         {
-            _quitRequested = true;
+            quitRequested = true;
+            source.Cancel();
         };
         Console.CancelKeyPress += delegate (object? sender, ConsoleCancelEventArgs e)
         {
             Console.WriteLine("Cancel Key Pressed");
             e.Cancel = true;
-            _quitRequested = true;
+            quitRequested = true;
+            source.Cancel();
         };
+        Graph g = new Graph(17);
         using (var oled = new SSD1306_128_64(1))
         {
             SKPaint paint = new()
@@ -32,16 +37,21 @@ internal class Program
             ScreenStack stack = new ScreenStack();
 
             var ip = Metrics.GetLocalIPAddress();
-            while (!_quitRequested)
+            var token = source.Token;
+
+            while (!quitRequested)
             {
                 var metrics = Metrics.GetUnixMetrics();
                 var cpuUsage = Metrics.GetCpuMetrics();
                 var totalMemory = Metrics.SizeSuffix((long)metrics.Total, 1);
                 var usedMemory = Metrics.SizeSuffix((long)metrics.Used, 1);
+                g.Update((byte)cpuUsage.CPU);
                 stack.Add($"IP:{ip}");
                 stack.Add($"CPU: {cpuUsage.CPU}%");
+                stack.AddGraph(g);
                 stack.Add($"Mem: {usedMemory} / {totalMemory}");
                 stack.Add($"Up: {cpuUsage.UpTime}");
+
 
                 oled.Begin();
                 oled.Clear();
@@ -57,7 +67,10 @@ internal class Program
 
                 oled.Display();
                 stack.Reset();
-                Thread.Sleep(5000);
+                if (token.IsCancellationRequested)
+                    break;
+                token.WaitHandle.WaitOne(5000);
+
             }
             Console.WriteLine("Exiting");
             oled.Begin();
