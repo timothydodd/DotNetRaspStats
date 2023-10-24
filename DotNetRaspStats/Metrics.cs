@@ -1,9 +1,9 @@
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
-
 public static class Metrics
 {
+
     private static long totalMemoryInKb;
 
 
@@ -24,8 +24,10 @@ public static class Metrics
         var uptime = GetStringSection(output, "up", ",");
 
         var metrics = new UptimeMetrics();
-        double percentage = double.Parse(cpu.Trim());
-        metrics.CPU = percentage;
+        double percentage = double.Parse(cpu.Trim()) / Environment.ProcessorCount * 100;
+        if (percentage > 100)
+            percentage = 100;
+        metrics.CPU = Math.Round(percentage, 0);
         metrics.UpTime = uptime;
 
         return metrics;
