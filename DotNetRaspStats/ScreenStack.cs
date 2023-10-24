@@ -4,9 +4,7 @@ public class ScreenStack
 {
     public int FontSize = 13;
     public int Padding = 2;
-
-
-    List<string> Items = new List<string>();
+    private readonly List<string> Items = new();
     public void Add(string item)
     {
         Items.Add(item);

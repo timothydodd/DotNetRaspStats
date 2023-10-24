@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using System.Net;
-using System.Net.Sockets;
-using Sang.IoT.SSD1306;
+﻿using Sang.IoT.SSD1306;
 using SkiaSharp;
 
 internal class Program
@@ -29,13 +26,13 @@ internal class Program
                 TextSize = 13,
                 Style = SKPaintStyle.Fill,
             };
-            ScreenStack stack = new ScreenStack();
+            ScreenStack stack = new();
 
             var ip = Metrics.GetLocalIPAddress();
             while (!_quitRequested)
             {
-                var metrics = Metrics.GetUnixMetrics();
-                var cpuUsage = Metrics.GetCpuMetrics();
+                MemoryMetrics metrics = Metrics.GetUnixMetrics();
+                UptimeMetrics cpuUsage = Metrics.GetCpuMetrics();
                 var totalMemory = Metrics.SizeSuffix((long)metrics.Total, 1);
                 var usedMemory = Metrics.SizeSuffix((long)metrics.Used, 1);
                 stack.Add($"IP:{ip}");
@@ -46,7 +43,7 @@ internal class Program
                 oled.Begin();
                 oled.Clear();
 
-                using SKBitmap bitmap = new SKBitmap(128, 64, true);
+                using SKBitmap bitmap = new(128, 64, true);
 
                 using SKCanvas canvas = new(bitmap);
 
@@ -59,13 +56,13 @@ internal class Program
                 stack.Reset();
                 Thread.Sleep(5000);
             }
+
+            // Clear Screen on exit
             Console.WriteLine("Exiting");
             oled.Begin();
             oled.Clear();
             oled.Display();
         }
-
-
     }
 }
 

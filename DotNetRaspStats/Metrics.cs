@@ -1,19 +1,19 @@
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
-using Microsoft.CSharp.RuntimeBinder;
 
 public static class Metrics
 {
-    private const int DigitsInResult = 2;
     private static long totalMemoryInKb;
 
 
     public static UptimeMetrics GetCpuMetrics()
     {
         string output = "";
-        var info = new ProcessStartInfo("uptime");
-        info.RedirectStandardOutput = true;
+        var info = new ProcessStartInfo("uptime")
+        {
+            RedirectStandardOutput = true
+        };
         using (var process = Process.Start(info))
         {
             output = process.StandardOutput.ReadToEnd();
@@ -49,10 +49,12 @@ public static class Metrics
     {
         var output = "";
 
-        var info = new ProcessStartInfo("free -m");
-        info.FileName = "/bin/bash";
-        info.Arguments = "-c \"free -m\"";
-        info.RedirectStandardOutput = true;
+        var info = new ProcessStartInfo("free -m")
+        {
+            FileName = "/bin/bash",
+            Arguments = "-c \"free -m\"",
+            RedirectStandardOutput = true
+        };
 
         using (var process = Process.Start(info))
         {
@@ -62,10 +64,12 @@ public static class Metrics
         var lines = output.Split("\n");
         var memory = lines[1].Split(" ", StringSplitOptions.RemoveEmptyEntries);
 
-        var metrics = new MemoryMetrics();
-        metrics.Total = double.Parse(memory[1]) * 1024 * 1024;
-        metrics.Used = double.Parse(memory[2]) * 1024 * 1024;
-        metrics.Free = double.Parse(memory[3]) * 1024 * 1024;
+        var metrics = new MemoryMetrics
+        {
+            Total = double.Parse(memory[1]) * 1024 * 1024,
+            Used = double.Parse(memory[2]) * 1024 * 1024,
+            Free = double.Parse(memory[3]) * 1024 * 1024
+        };
 
         return metrics;
     }
@@ -105,9 +109,9 @@ public static class Metrics
         }
     }
 
-    static readonly string[] SizeSuffixes =
+    private static readonly string[] SizeSuffixes =
                    { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
-    public static string SizeSuffix(Int64 value, int decimalPlaces = 1)
+    public static string SizeSuffix(long value, int decimalPlaces = 1)
     {
         if (decimalPlaces < 0)
         { throw new ArgumentOutOfRangeException("decimalPlaces"); }
@@ -137,8 +141,8 @@ public static class Metrics
     }
     public static string GetLocalIPAddress()
     {
-        var host = Dns.GetHostEntry(Dns.GetHostName());
-        foreach (var ip in host.AddressList)
+        IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
+        foreach (IPAddress ip in host.AddressList)
         {
             if (ip.AddressFamily == AddressFamily.InterNetwork)
             {
@@ -147,18 +151,17 @@ public static class Metrics
         }
         throw new Exception("No network adapters with an IPv4 address in the system!");
     }
+}
+public class MemoryMetrics
+{
+    public double Total;
+    public double Used;
+    public double Free;
 
-    public class MemoryMetrics
-    {
-        public double Total;
-        public double Used;
-        public double Free;
-
-        public double Percentage => Total / Used * 100;
-    }
-    public class UptimeMetrics
-    {
-        public double CPU { get; set; }
-        public string? UpTime { get; set; }
-    }
+    public double Percentage => Total / Used * 100;
+}
+public class UptimeMetrics
+{
+    public double CPU { get; set; }
+    public string? UpTime { get; set; }
 }
