@@ -6,3 +6,31 @@
  
 Fonts Used
 https://www.fontspace.com/roboto-font-f13281
+
+
+### Notes
+
+dotnetraspstats.service
+``` bash
+
+dotnet publish -c Release -r linux-arm64 --self-contained=true -p:PublishSingleFile=true -p:GenerateRuntimeConfigurationFiles=true -o artifacts
+#/usr/sbin/DotNetRaspStats
+
+sudo chmod 0755 /usr/sbin/DotNetRaspStats
+#copy Files to sbin
+sudo cp -r ./ /usr/sbin/DotNetRaspStats
+
+#copy .service file to system
+sudo cp ./dotnetraspstats.service /etc/systemd/system/
+
+sudo systemctl daemon-reload
+
+sudo systemctl status dotnetraspstats.service
+
+sudo systemctl start dotnetraspstats.service
+sudo systemctl stop dotnetraspstats.service
+sudo systemctl restart dotnetraspstats.service
+sudo systemctl enable dotnetraspstats.service
+```
+
+

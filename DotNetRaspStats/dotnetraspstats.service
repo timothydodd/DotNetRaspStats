@@ -1,0 +1,10 @@
+[Unit]
+Description=Rasp Stat Service
+
+[Service]
+Type=notify
+TimeoutStartSec=300
+ExecStart=/usr/sbin/DotNetRaspStats/DotNetRaspStats
+
+[Install]
+WantedBy=multi-user.target
