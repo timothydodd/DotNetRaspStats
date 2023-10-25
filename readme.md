@@ -3,7 +3,7 @@
  
  Runs every 5 Seconds
  
- ![image](https://github.com/timothydodd/DotNetRaspStats/assets/8201238/a0ff867e-8e43-46d1-b7a7-af6eed7aed21)
+![screen](https://github.com/timothydodd/DotNetRaspStats/assets/8201238/9faae8b0-8f06-400d-aa2d-fe281cc21713)
 
 Fonts Used
 https://www.fontspace.com/roboto-font-f13281
