@@ -5,10 +5,16 @@ name: .NET
 
 on:
   push:
+    tags:
+      - 'v*'
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-
+  workflow_run:
+    workflows:
+    - "test"   # basically i have another test action to run unit tests
+    types:
+    - completed
 jobs:
   test:
     name: Debug Build & Test  
@@ -74,7 +80,7 @@ jobs:
       run: dotnet restore
     - name: Build
       run: |
-        dotnet publish -c Release -r linux-arm64 --self-contained=true -p:PublishSingleFile=true -p:GenerateRuntimeConfigurationFiles=true -o artifacts ./bin/linux-x64
+        dotnet publish -c Release -r linux-arm64 --self-contained=true -p:PublishSingleFile=true -p:GenerateRuntimeConfigurationFiles=true -o ./bin/linux-x64
         zip -r linux-x64 ./bin/linux-x64
     - name: Get Release File Name & Upload URL
       id: get_release_info
