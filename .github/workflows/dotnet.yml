@@ -63,11 +63,6 @@ jobs:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       NUGET_XMLDOC_MODE: skip
     steps:
-    - uses: actions/checkout@v1
-    - name: Load Release URL File from release job
-      uses: actions/download-artifact@v1
-      with:
-        name: release_url
     - name: Setup .NET 7.0 (current)
       uses: actions/setup-dotnet@v3
       with:
