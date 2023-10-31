@@ -144,14 +144,16 @@ public static class Metrics
     public static string GetLocalIPAddress()
     {
         IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
+        var ipAddress = "";
         foreach (IPAddress ip in host.AddressList)
         {
             if (ip.AddressFamily == AddressFamily.InterNetwork)
             {
-                return ip.ToString();
+                if (string.IsNullOrWhiteSpace(ipAddress) || ipAddress.StartsWith("127.0."))
+                    ipAddress = ip.ToString();
             }
         }
-        throw new Exception("No network adapters with an IPv4 address in the system!");
+        return ipAddress;
     }
 }
 public class MemoryMetrics
