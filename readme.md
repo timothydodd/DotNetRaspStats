@@ -13,6 +13,12 @@ https://www.fontspace.com/roboto-font-f13281
 These notes will be cleaned up soon
 dotnetraspstats.service
 ``` bash
+requirements
+sudo apt-get install raspi-config
+
+#optional configurations
+dtoverlay=gpio-shutdown,gpio_pin=21
+dtoverlay=act-led,gpio=19
 
 dotnet publish -c Release -r linux-arm64 --self-contained=true -p:PublishSingleFile=true -p:GenerateRuntimeConfigurationFiles=true -o artifacts
 #/usr/sbin/DotNetRaspStats
@@ -32,6 +38,14 @@ sudo systemctl start dotnetraspstats.service
 sudo systemctl stop dotnetraspstats.service
 sudo systemctl restart dotnetraspstats.service
 sudo systemctl enable dotnetraspstats.service
+
+compress
+    tar -zcvf rasp-stat.tar.gz artifacts
+decompress
+ tar -zxvf rasp-stat.tar.gz
+
+
+ scp [file_name]  remoteuser@remotehost:/remote/directory
 ```
 
 
