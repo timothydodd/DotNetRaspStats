@@ -54,6 +54,13 @@ jobs:
         release_name: Release ${{ github.ref }}
         draft: false
         prerelease: false
+    - name: Output Release URL File
+      run: echo "${{ steps.create_release.outputs.upload_url }}" > release_url.txt
+    - name: Save Release URL File for publish
+      uses: actions/upload-artifact@v1
+      with:
+        name: release_url
+        path: release_url.txt       
   publish:
     if: contains(github.ref, 'tags/v') # works only version tagged
     needs: [test, create_release]
@@ -63,6 +70,11 @@ jobs:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       NUGET_XMLDOC_MODE: skip
     steps:
+    - uses: actions/checkout@v1
+    - name: Load Release URL File from release job
+      uses: actions/download-artifact@v1
+      with:
+        name: release_url
     - name: Setup .NET 7.0 (current)
       uses: actions/setup-dotnet@v3
       with:
