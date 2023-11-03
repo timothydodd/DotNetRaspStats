@@ -7,12 +7,23 @@
 
 Fonts Used
 https://www.fontspace.com/roboto-font-f13281
+# ReInstall Script
+``` bash
 
+sudo systemctl stop dotnetraspstats.service &&
+	rm -rf bin &&
+	wget https://github.com/timothydodd/DotNetRaspStats/releases/download/v1.0.2/timothydodd.DotNetRaspStats-refs.tags.v1.0.2-linux-x64.zip &&
+	unzip timothydodd.DotNetRaspStats-refs.tags.v1.0.2-linux-x64.zip &&
+	rm timothydodd.DotNetRaspStats-refs.tags.v1.0.2-linux-x64.zip &&
+	sudo cp -r ./bin/linux-x64/. /usr/sbin/DotNetRaspStats &&
+	sudo systemctl start dotnetraspstats.service
+```
 
 ### Notes
 These notes will be cleaned up soon
 dotnetraspstats.service
 ``` bash
+
 requirements
 
 sudo apt-get update && \
@@ -28,9 +39,6 @@ dtoverlay=act-led,gpio=19
 
 dotnet publish -c Release -r linux-arm64 --self-contained=true -p:PublishSingleFile=true -p:GenerateRuntimeConfigurationFiles=true -o artifacts
 #/usr/sbin/DotNetRaspStats
-
-
-wget https://github.com/timothydodd/DotNetRaspStats/releases/download/v1.0.1/timothydodd.DotNetRaspStats-refs.tags.v1.0.1-linux-x64.zip
 
 sudo chmod 0755 /usr/sbin/DotNetRaspStats
 #copy Files to sbin
