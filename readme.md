@@ -14,14 +14,23 @@ These notes will be cleaned up soon
 dotnetraspstats.service
 ``` bash
 requirements
+
+sudo apt-get update && \
+sudo apt-get install -y dotnet-sdk-7.0
 sudo apt-get install raspi-config
+sudo apt-get install unzip
 
 #optional configurations
 dtoverlay=gpio-shutdown,gpio_pin=21
 dtoverlay=act-led,gpio=19
 
+
+
 dotnet publish -c Release -r linux-arm64 --self-contained=true -p:PublishSingleFile=true -p:GenerateRuntimeConfigurationFiles=true -o artifacts
 #/usr/sbin/DotNetRaspStats
+
+
+wget https://github.com/timothydodd/DotNetRaspStats/releases/download/v1.0.1/timothydodd.DotNetRaspStats-refs.tags.v1.0.1-linux-x64.zip
 
 sudo chmod 0755 /usr/sbin/DotNetRaspStats
 #copy Files to sbin
