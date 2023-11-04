@@ -11,16 +11,16 @@ https://www.fontspace.com/roboto-font-f13281
 
 ### Install Script
 ``` bash
+sudo  mkdir /usr/sbin/DotNetRaspStats
+sudo chmod 0755 /usr/sbin/DotNetRaspStats
 
-sudo mkdir /usr/sbin/DotNetRaspStats &&
-    chmod 0755 /usr/sbin/DotNetRaspStats &&
-	wget https://github.com/timothydodd/DotNetRaspStats/releases/download/v1.0.3/timothydodd.DotNetRaspStats-refs.tags.v1.0.3-linux-x64.zip &&
+sudo wget https://github.com/timothydodd/DotNetRaspStats/releases/download/v1.0.3/timothydodd.DotNetRaspStats-refs.tags.v1.0.3-linux-x64.zip &&
 	unzip timothydodd.DotNetRaspStats-refs.tags.v1.0.3-linux-x64.zip &&
-	rm timothydodd.DotNetRaspStats-refs.tags.v1.0.3-linux-x64.zip &&
-    cp -r ./bin/linux-x64/dotnetraspstats.service /etc/systemd/system/ &&
-	cp -r ./bin/linux-x64/. /usr/sbin/DotNetRaspStats &&
-    rm -rf bin &&
-	systemctl start dotnetraspstats.service
+	sudo rm timothydodd.DotNetRaspStats-refs.tags.v1.0.3-linux-x64.zip &&
+    sudo cp -r ./bin/linux-x64/dotnetraspstats.service /etc/systemd/system/ &&
+	sudo  cp -r ./bin/linux-x64/. /usr/sbin/DotNetRaspStats &&
+    sudo  rm -rf bin &&
+	sudo  systemctl start dotnetraspstats.service
 ```
 ## ReInstall Script
 ``` bash
