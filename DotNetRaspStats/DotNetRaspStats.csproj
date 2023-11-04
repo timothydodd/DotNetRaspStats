@@ -9,10 +9,14 @@
 
   <ItemGroup>
     <None Remove="assets\RobotoRegular-3m4L.ttf" />
+    <None Remove="dotnetraspstats.service" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="assets\RobotoRegular-3m4L.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="dotnetraspstats.service">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

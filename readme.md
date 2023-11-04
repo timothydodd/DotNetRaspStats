@@ -7,14 +7,29 @@
 
 Fonts Used
 https://www.fontspace.com/roboto-font-f13281
-# ReInstall Script
+
+
+### Install Script
+``` bash
+
+sudo mkdir /usr/sbin/DotNetRaspStats &&
+    chmod 0755 /usr/sbin/DotNetRaspStats &&
+	wget https://github.com/timothydodd/DotNetRaspStats/releases/download/v1.0.3/timothydodd.DotNetRaspStats-refs.tags.v1.0.3-linux-x64.zip &&
+	unzip timothydodd.DotNetRaspStats-refs.tags.v1.0.3-linux-x64.zip &&
+	rm timothydodd.DotNetRaspStats-refs.tags.v1.0.3-linux-x64.zip &&
+    cp -r ./bin/linux-x64/dotnetraspstats.service /etc/systemd/system/ &&
+	cp -r ./bin/linux-x64/. /usr/sbin/DotNetRaspStats &&
+    rm -rf bin &&
+	systemctl start dotnetraspstats.service
+```
+## ReInstall Script
 ``` bash
 
 sudo systemctl stop dotnetraspstats.service &&
 	rm -rf bin &&
-	wget https://github.com/timothydodd/DotNetRaspStats/releases/download/v1.0.2/timothydodd.DotNetRaspStats-refs.tags.v1.0.2-linux-x64.zip &&
-	unzip timothydodd.DotNetRaspStats-refs.tags.v1.0.2-linux-x64.zip &&
-	rm timothydodd.DotNetRaspStats-refs.tags.v1.0.2-linux-x64.zip &&
+	wget https://github.com/timothydodd/DotNetRaspStats/releases/download/v1.0.3/timothydodd.DotNetRaspStats-refs.tags.v1.0.3-linux-x64.zip &&
+	unzip timothydodd.DotNetRaspStats-refs.tags.v1.0.3-linux-x64.zip &&
+	rm timothydodd.DotNetRaspStats-refs.tags.v1.0.3-linux-x64.zip &&
 	sudo cp -r ./bin/linux-x64/. /usr/sbin/DotNetRaspStats &&
 	sudo systemctl start dotnetraspstats.service
 ```
@@ -26,9 +41,9 @@ dotnetraspstats.service
 
 requirements
 
-sudo apt-get update && \
-sudo apt-get install -y dotnet-sdk-7.0
-sudo apt-get install raspi-config
+sudo apt-get update && 
+sudo apt-get install -y dotnet-sdk-7.0 &&
+sudo apt-get install raspi-config &&
 sudo apt-get install unzip
 
 #optional configurations
