@@ -84,6 +84,7 @@ jobs:
     - name: Build
       run: |
         dotnet publish -c Release -r linux-arm64 --self-contained=true -p:PublishSingleFile=true -p:GenerateRuntimeConfigurationFiles=true -o ./bin/linux-x64
+        cp -b ./dotnetraspstats.service ./bin/linux-x64
         zip -r linux-x64 ./bin/linux-x64
     - name: Upload Release Asset
       id: upload-release-asset 
