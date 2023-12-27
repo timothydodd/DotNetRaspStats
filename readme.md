@@ -49,8 +49,11 @@ sudo apt-get install unzip
 #optional configurations
 dtoverlay=gpio-shutdown,gpio_pin=21
 dtoverlay=act-led,gpio=19
+dtoverlay=disable-wifi
+dtoverlay=disable-bt
 
-
+commandline.txt
+ip=192.168.2.55::192.168.2.1:255.255.255.0:rpi:eth0:off
 
 dotnet publish -c Release -r linux-arm64 --self-contained=true -p:PublishSingleFile=true -p:GenerateRuntimeConfigurationFiles=true -o artifacts
 #/usr/sbin/DotNetRaspStats
@@ -76,6 +79,8 @@ compress
 decompress
  tar -zxvf rasp-stat.tar.gz
 
+sudo rfkill block bluetooth
+sudo rfkill block wifi
 
  scp [file_name]  remoteuser@remotehost:/remote/directory
 ```
